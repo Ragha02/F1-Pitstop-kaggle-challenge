@@ -29,6 +29,8 @@ The final stack produced the strongest internal validation score in this project
 | V3 | Dense-feature ExtraTrees model | `0.944169` |
 | V3.1 | Weighted XGBoost + ExtraTrees blend | `0.945166` |
 | V4 | Lean stacked ensemble | `0.947622` |
+| V5 | Ported to Kaggle Notebook + Deep Feature Engineering | `0.947400` (Overfit LB) |
+| V6 | Advanced Feature Eng + Ridge Meta-Learner (Kaggle) | `0.942980` (Stable) |
 
 ![OOF Progression](assets/oof_auc_progress.svg)
 
@@ -57,6 +59,8 @@ The final stack produced the strongest internal validation score in this project
 ├── train_dense_models.py
 ├── train_solution.py
 ├── train_stacking_models.py
+├── f1_pitstop_v5.ipynb
+├── f1_pitstop_v6.ipynb
 ├── requirements.txt
 └── README.md
 ```
@@ -91,6 +95,7 @@ The project intentionally moved through increasingly diverse model families:
 2. external-data augmentation
 3. dense tabular ensembles
 4. final stacking over complementary base learners
+5. **Kaggle Kernel execution (V5 & V6)**: Ported the pipeline directly to Kaggle using `f1_pitstop_v5.ipynb` and `f1_pitstop_v6.ipynb` to utilize Kaggle's backend for direct submission. Implemented deep statistical feature engineering (K-Fold Target Encoding, interactions) and used a stable **Ridge Regression** meta-learner to prevent validation overfitting.
 
 ## Setup
 
