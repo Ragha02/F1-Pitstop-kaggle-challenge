@@ -1,0 +1,16 @@
+{
+  "id": "araghusreenandan/f1-pitstop-v7-seed-ensembled-lean-stack",
+  "title": "F1 Pitstop V7 Seed-Ensembled Lean Stack",
+  "code_file": "f1_pitstop_v7.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_internet": "false",
+  "competition_sources": [
+    "playground-series-s6e5"
+  ],
+  "dataset_sources": [
+    "aadigupta1601/f1-strategy-dataset-pit-stop-prediction"
+  ]
+}

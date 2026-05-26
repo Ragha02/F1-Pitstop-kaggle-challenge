@@ -6,6 +6,10 @@ catboost_info/
 external_data/
 outputs/
 outputs_*/
+kaggle_kernel_*_output/
+reference_notebook/
+reference_notebook_varad/
+micro_blends/
 
 .venv/
 venv/

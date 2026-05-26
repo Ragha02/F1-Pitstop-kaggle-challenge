@@ -1,0 +1,16 @@
+{
+  "id": "araghusreenandan/f1-pitstop-v9-xgb-lgb-pair-stack",
+  "title": "F1 Pitstop V9 XGB LGB Pair Stack",
+  "code_file": "f1_pitstop_v9_pair.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_internet": "false",
+  "competition_sources": [
+    "playground-series-s6e5"
+  ],
+  "dataset_sources": [
+    "aadigupta1601/f1-strategy-dataset-pit-stop-prediction"
+  ]
+}

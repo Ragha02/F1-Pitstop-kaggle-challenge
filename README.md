@@ -13,10 +13,11 @@ This project started as a strong tabular baseline and evolved into a multi-stage
 - external supervision from the original F1 strategy dataset
 - dense-model experimentation with `ExtraTrees`
 - final lean stacked ensemble using `CatBoost`, `XGBoost`, `LightGBM`, `HistGradientBoosting`, and `ExtraTrees`
+- later pair-ensemble experiments centered on `XGBoost + LightGBM` with external data and a logistic meta-learner
 
-The final stack produced the strongest internal validation score in this project:
+The strongest internal validation score in this project currently comes from the pair ensemble family:
 
-- **Best OOF ROC-AUC:** `0.947622`
+- **Best OOF ROC-AUC:** `0.951948`
 
 ## Results
 
@@ -31,6 +32,9 @@ The final stack produced the strongest internal validation score in this project
 | V4 | Lean stacked ensemble | `0.947622` |
 | V5 | Ported to Kaggle Notebook + Deep Feature Engineering | `0.947400` (Overfit LB) |
 | V6 | Advanced Feature Eng + Ridge Meta-Learner (Kaggle) | `0.942980` (Stable) |
+| V7 | Kaggle seed-ensembled lean stack | `0.947561` |
+| V8 | Micro-blend of V7 with ExtraTrees diversity | leaderboard tweak |
+| V9 | XGBoost + LightGBM pair stack with external data | `0.951613` |
 
 ![OOF Progression](assets/oof_auc_progress.svg)
 
@@ -46,6 +50,15 @@ The final stack produced the strongest internal validation score in this project
 | Vote of boosted-tree family | `0.944581` |
 | **Stacked meta-model** | **`0.947622`** |
 
+### Pair Ensemble
+
+| Model | OOF ROC-AUC |
+| --- | ---: |
+| XGBoost pair model | `0.950515` |
+| LightGBM pair model | `0.951888` |
+| Equal-weight pair average | `0.951597` |
+| **Logistic meta pair stack** | **`0.951613`** |
+
 ![Stack Architecture](assets/stack_architecture.svg)
 
 ## Repository Structure
@@ -56,11 +69,15 @@ The final stack produced the strongest internal validation score in this project
 │   ├── oof_auc_progress.svg
 │   └── stack_architecture.svg
 ├── blend_predictions.py
+├── submission_micro_blend.py
 ├── train_dense_models.py
+├── train_pair_ensemble.py
 ├── train_solution.py
 ├── train_stacking_models.py
 ├── f1_pitstop_v5.ipynb
 ├── f1_pitstop_v6.ipynb
+├── kaggle_kernel_v7/
+├── kaggle_kernel_v9_pair/
 ├── requirements.txt
 └── README.md
 ```
@@ -96,6 +113,7 @@ The project intentionally moved through increasingly diverse model families:
 3. dense tabular ensembles
 4. final stacking over complementary base learners
 5. **Kaggle Kernel execution (V5 & V6)**: Ported the pipeline directly to Kaggle using `f1_pitstop_v5.ipynb` and `f1_pitstop_v6.ipynb` to utilize Kaggle's backend for direct submission. Implemented deep statistical feature engineering (K-Fold Target Encoding, interactions) and used a stable **Ridge Regression** meta-learner to prevent validation overfitting.
+6. **Pair ensemble exploration (V7-V9)**: tested Kaggle-first execution, micro-blending, and a stronger `XGBoost + LightGBM` family with external F1 data. V9 also exposed and fixed a row-order bug that had misaligned predictions with `id`s and caused a false `0.49` leaderboard result.
 
 ## Setup
 
@@ -187,6 +205,29 @@ python3 blend_predictions.py \
   --weight-a 0.25 \
   --weight-b 0.75 \
   --output-path /path/to/final_submission.csv
+```
+
+### Micro-blend utility
+
+```bash
+python3 submission_micro_blend.py \
+  --primary /path/to/primary_submission.csv \
+  --secondary /path/to/secondary_submission.csv \
+  --primary-weight 0.99 \
+  --secondary-weight 0.01 \
+  --output /path/to/micro_blend.csv
+```
+
+### Pair ensemble pipeline
+
+```bash
+python3 train_pair_ensemble.py \
+  --train-path /path/to/train.csv \
+  --test-path /path/to/test.csv \
+  --external-train-path /path/to/f1_strategy_dataset_v4.csv \
+  --sample-submission-path /path/to/sample_submission.csv \
+  --folds 5 \
+  --output-dir outputs_pair_final
 ```
 
 ## Notes
